@@ -17,14 +17,14 @@ namespace SinglePageApplication.ApplicationServices.Services
 
 
         #region [- Post() -]
-        public async Task<IResponse<Guid>> Post(PostProductDto postProductDto)
+        public async Task<IResponse<bool>> Post(PostProductDto postProductDto)
         {
             if (postProductDto == null)
-                return new Response<Guid>("Request body cannot be null.");
+                return new Response<bool>("Request body cannot be null.");
             if (string.IsNullOrWhiteSpace(postProductDto.Title))
-                return new Response<Guid>("Title is a required field.");
+                return new Response<bool>("Title is a required field.");
             if (postProductDto.UnitPrice < 0)
-                return new Response<Guid>("Unit price cannot be negative.");
+                return new Response<bool>("Unit price cannot be negative.");
 
 
             var product = new Product
@@ -36,7 +36,7 @@ namespace SinglePageApplication.ApplicationServices.Services
 
             await _productRepository.Insert(product);
 
-            return new Response<Guid>(product.Id);
+            return new Response<bool>(true);
         }
         #endregion
 
@@ -51,20 +51,22 @@ namespace SinglePageApplication.ApplicationServices.Services
 
 
             var productResponse = await _productRepository.SelectById(getByIdProductDto.Id);
+
             if (!productResponse.IsSuccessful || productResponse.Result == null)
                 return new Response<GetByIdProductDto>("Product not found.");
 
 
 
             var product = productResponse.Result;
-            var dto = new GetByIdProductDto
+
+            var result = new GetByIdProductDto
             {
                 Id = product.Id,
                 Title = product.Title,
                 UnitPrice = product.UnitPrice,
             };
 
-            return new Response<GetByIdProductDto>(dto);
+            return new Response<GetByIdProductDto>(result);
         }
         #endregion
 
@@ -73,6 +75,7 @@ namespace SinglePageApplication.ApplicationServices.Services
         {
 
             var response = await _productRepository.SelectAll();
+
             if (!response.IsSuccessful || response.Result == null)
                 return new Response<GetAllProductDto>(response.ErrorMessage ?? "Failed to retrieve products.");
 
@@ -109,6 +112,7 @@ namespace SinglePageApplication.ApplicationServices.Services
 
 
             var productResponse = await _productRepository.SelectById(putProductDto.Id);
+
             if (!productResponse.IsSuccessful || productResponse.Result == null)
                 return new Response<bool>("Product not found to update.");
 
@@ -135,6 +139,7 @@ namespace SinglePageApplication.ApplicationServices.Services
 
 
             var productResponse = await _productRepository.SelectById(deleteProductDto.Id);
+
             if (!productResponse.IsSuccessful || productResponse.Result == null)
                 return new Response<bool>("Product not found to delete.");
 
@@ -144,9 +149,6 @@ namespace SinglePageApplication.ApplicationServices.Services
             return new Response<bool>(true);
         }
         #endregion
-
-
-
 
 
     }

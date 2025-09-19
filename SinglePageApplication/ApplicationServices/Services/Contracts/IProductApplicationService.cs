@@ -5,8 +5,9 @@ namespace SinglePageApplication.ApplicationServices.Services.Contracts
 {
     public interface IProductApplicationService
     {
+
         #region [- POST -]
-        Task<IResponse<Guid>> Post(PostProductDto postProductDto);
+        Task<IResponse<bool>> Post(PostProductDto postProductDto);
         #endregion
 
         #region [- GET -]

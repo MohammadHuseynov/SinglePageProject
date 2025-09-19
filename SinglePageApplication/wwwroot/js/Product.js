@@ -70,7 +70,7 @@ function LoadProducts() {
             setFeedback(`Error loading products: ${error.message}`, "danger");
         });
 }
- 
+
 // --- Form and Data Submission Functions ---
 
 /**
@@ -220,9 +220,9 @@ function SelectedProduct(checkbox, id) {
         selectedProductIds = selectedProductIds.filter(productId => productId !== id);
     }
 
-  
+
     if (selectedProductIds.length === 1) {
-      
+
         const singleSelectedId = selectedProductIds[0];
 
         // Find the table row (<tr>) for this product using its unique ID.
